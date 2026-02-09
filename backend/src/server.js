@@ -58,29 +58,33 @@ async function gracefulShutdown(signal) {
     process.exit(0)
   }
 
-  // Give ongoing requests 10 seconds to finish
-  server.close(() => {
-    logger.info('HTTP server closed')
-
-    // Close database connections
-    const mongoose = require('mongoose')
-    mongoose.connection.close(false, () => {
-      logger.info('MongoDB connection closed')
-
-      // Close Redis connection
-      const redis = require('./config/redis')
-      redis.quit(() => {
-        logger.info('Redis connection closed')
-        process.exit(0)
-      })
-    })
-  })
-
   // Force shutdown after 15 seconds
-  setTimeout(() => {
+  const forceShutdownTimer = setTimeout(() => {
     logger.error('Forced shutdown after timeout')
     process.exit(1)
   }, 15000)
+
+  try {
+    // Close HTTP server
+    await new Promise((resolve) => server.close(resolve))
+    logger.info('HTTP server closed')
+
+    // Close MongoDB connection
+    const mongoose = require('mongoose')
+    await mongoose.connection.close()
+    logger.info('MongoDB connection closed')
+
+    // Close Redis connection
+    const redis = require('./config/redis')
+    await redis.quit()
+    logger.info('Redis connection closed')
+
+    clearTimeout(forceShutdownTimer)
+    process.exit(0)
+  } catch (error) {
+    logger.error({ err: error }, 'Error during graceful shutdown')
+    process.exit(1)
+  }
 }
 
 // Gestion des erreurs non catchées

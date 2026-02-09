@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const Merchant = require('../models/Merchant')
-const { verifyWebhookSignature, createRefund, deactivatePaymentLink } = require('../services/stripe.service.improved')
-const { sendPurchaseConfirmation } = require('../services/sms.service.improved')
+const { verifyWebhookSignature, createRefund, deactivatePaymentLink } = require('../services/stripe.service')
+const { sendPurchaseConfirmation } = require('../services/sms.service')
 const { generatePickupCode, formatDate } = require('../utils/helpers')
 const logger = require('../utils/logger')
 
