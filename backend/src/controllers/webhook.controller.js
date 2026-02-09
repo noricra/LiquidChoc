@@ -57,11 +57,11 @@ async function handleStripeWebhook(req, res) {
       // 2. Vérifier le stock DANS la transaction
       if (liquidation.quantitySold >= liquidation.quantity) {
         await mongoSession.abortTransaction()
-        console.log('⚠️  Stock épuisé - Race condition évitée', liquidationId)
+        console.log('WARNING: Stock épuisé - Race condition évitée', liquidationId)
 
         if (session.payment_intent) {
           await createRefund(session.payment_intent, 'out_of_inventory')
-          console.log('✅ Auto-refund exécuté')
+          console.log('Auto-refund exécuté')
         }
         return res.json({ received: true })
       }
@@ -96,7 +96,7 @@ async function handleStripeWebhook(req, res) {
       if (liquidation.quantitySold >= liquidation.quantity && liquidation.stripePaymentLinkId) {
         deactivatePaymentLink(liquidation.stripePaymentLinkId)
           .catch(err => console.error('Deactivate payment link error:', err))
-        console.log('🔒 Payment Link désactivé - Stock épuisé')
+        console.log('Payment Link désactivé - Stock épuisé')
       }
 
       // 6. Envoyer SMS de confirmation au client
@@ -108,7 +108,7 @@ async function handleStripeWebhook(req, res) {
         }).catch(err => console.error('SMS confirmation failed:', err))
       }
 
-      console.log('✅ Sale created:', pickupCode)
+      console.log('Sale created:', pickupCode)
       res.json({ received: true })
 
     } catch (txError) {

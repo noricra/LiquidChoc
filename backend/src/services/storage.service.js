@@ -32,7 +32,7 @@ async function uploadImage(buffer, filename, mimetype = 'image/jpeg', options = 
     .replace(/[^a-z0-9]/g, '-')
     .replace(/-+/g, '-')
 
-  console.log('🔧 R2 Config:', {
+  console.log('R2 Config:', {
     endpoint: r2Config.endpoint,
     bucket: r2Config.bucketName,
     business: cleanBusinessName,
@@ -64,7 +64,7 @@ async function uploadImage(buffer, filename, mimetype = 'image/jpeg', options = 
     ACL: 'public-read'
   }
 
-  console.log('📤 Uploading to R2:', {
+  console.log('Uploading to R2:', {
     bucket: params.Bucket,
     key: params.Key,
     contentType: params.ContentType,
@@ -79,11 +79,11 @@ async function uploadImage(buffer, filename, mimetype = 'image/jpeg', options = 
     // Backend will download from R2 on-demand and cache locally
     const imagePath = `${productId}/${safeFilename}`
 
-    console.log('✅ Upload success to R2:', key)
-    console.log('📸 Image path:', imagePath)
+    console.log('Upload success to R2:', key)
+    console.log('Image path:', imagePath)
     return imagePath
   } catch (error) {
-    console.error('❌ R2 Upload Error:', error.message)
+    console.error('R2 Upload Error:', error.message)
     console.error('Error details:', {
       code: error.code,
       statusCode: error.statusCode,

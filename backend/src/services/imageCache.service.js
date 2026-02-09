@@ -41,14 +41,14 @@ async function getImageWithFallback(productId, filename) {
     // Check if exists in cache
     try {
       await fs.access(localPath)
-      console.log(`✅ Image served from cache: ${productId}/${filename}`)
+      console.log(`Image served from cache: ${productId}/${filename}`)
       return localPath
     } catch {
       // File doesn't exist, need to download
     }
 
     // Download from R2
-    console.log(`🔄 Image not cached, downloading from R2: ${productId}/${filename}`)
+    console.log(`Image not cached, downloading from R2: ${productId}/${filename}`)
 
     await fs.mkdir(productCacheDir, { recursive: true })
 
@@ -82,11 +82,11 @@ async function getImageWithFallback(productId, filename) {
     // Save to local cache
     await fs.writeFile(localPath, data.Body)
 
-    console.log(`✅ Downloaded and cached from R2: ${productId}/${filename}`)
+    console.log(`Downloaded and cached from R2: ${productId}/${filename}`)
     return localPath
 
   } catch (error) {
-    console.error(`❌ Error getting image ${productId}/${filename}:`, error.message)
+    console.error(`Error getting image ${productId}/${filename}:`, error.message)
     return null
   }
 }
@@ -99,9 +99,9 @@ async function clearProductCache(productId) {
   try {
     const productCacheDir = path.join(CACHE_DIR, productId)
     await fs.rm(productCacheDir, { recursive: true, force: true })
-    console.log(`🗑️  Cache cleared for product: ${productId}`)
+    console.log(`Cache cleared for product: ${productId}`)
   } catch (error) {
-    console.error(`❌ Error clearing cache for ${productId}:`, error.message)
+    console.error(`Error clearing cache for ${productId}:`, error.message)
   }
 }
 

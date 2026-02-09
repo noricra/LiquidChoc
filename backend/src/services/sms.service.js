@@ -12,7 +12,7 @@ const { toE164 } = require('../utils/helpers')
  */
 async function sendSMS(to, body) {
   if (!twilioClient) {
-    console.warn('⚠️  Twilio not configured, skipping SMS')
+    console.warn('WARNING: Twilio not configured, skipping SMS')
     return false
   }
 
@@ -35,7 +35,7 @@ async function sendSMS(to, body) {
  */
 async function smsBroadcast(merchant, liquidation) {
   if (!merchant.subscribers || merchant.subscribers.length === 0) {
-    console.log('⚠️  No subscribers')
+    console.log('WARNING: No subscribers')
     return 0
   }
 
@@ -61,7 +61,7 @@ async function smsBroadcast(merchant, liquidation) {
     message
   })
 
-  console.log(`📤 SMS Broadcast enqueued: ${merchant.subscribers.length} subscribers (Job #${job.id})`)
+  console.log(`SMS Broadcast enqueued: ${merchant.subscribers.length} subscribers (Job #${job.id})`)
 
   return merchant.subscribers.length
 }

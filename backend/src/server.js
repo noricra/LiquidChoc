@@ -23,24 +23,24 @@ async function startServer() {
 ╔════════════════════════════════════════════════════════════╗
 ║                  BACKEND CAMÉLÉON                          ║
 ║                                                            ║
-║  🏪 Business: ${sectorConfig.businessName.padEnd(44)} ║
-║  ${sectorConfig.emoji}  Sector:  ${sectorConfig.name.padEnd(44)} ║
-║  🎨 Color:    ${config.branding.primaryColor.padEnd(44)} ║
-║  📍 Address:  ${sectorConfig.address.padEnd(44)} ║
+║  Business: ${sectorConfig.businessName.padEnd(46)} ║
+║  Sector:   ${sectorConfig.name.padEnd(46)} ║
+║  Color:    ${config.branding.primaryColor.padEnd(46)} ║
+║  Address:  ${sectorConfig.address.padEnd(46)} ║
 ║                                                            ║
-║  🚀 Port:     ${config.port.toString().padEnd(44)} ║
-║  🌍 Env:      ${config.nodeEnv.padEnd(44)} ║
+║  Port:     ${config.port.toString().padEnd(46)} ║
+║  Env:      ${config.nodeEnv.padEnd(46)} ║
 ╚════════════════════════════════════════════════════════════╝
     `)
 
     // Démarrer le serveur
     app.listen(config.port, () => {
-      console.log(`✅ Server running on http://localhost:${config.port}`)
-      console.log(`📡 Webhook ready on http://localhost:${config.port}/webhook`)
+      console.log(`Server running on http://localhost:${config.port}`)
+      console.log(`Webhook ready on http://localhost:${config.port}/webhook`)
     })
 
   } catch (error) {
-    console.error('❌ Failed to start server:', error)
+    console.error('ERROR: Failed to start server:', error)
     process.exit(1)
   }
 }

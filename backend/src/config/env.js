@@ -81,18 +81,18 @@ const validateConfig = () => {
     .map(([key]) => key)
 
   if (missing.length > 0) {
-    console.error(`❌ Missing required environment variables: ${missing.join(', ')}`)
+    console.error(`ERROR: Missing required environment variables: ${missing.join(', ')}`)
     process.exit(1)
   }
 
   // Validation du secteur
   const validSectors = ['food', 'games', 'services']
   if (!validSectors.includes(config.sector)) {
-    console.error(`❌ Invalid SECTOR: "${config.sector}". Must be one of: ${validSectors.join(', ')}`)
+    console.error(`ERROR: Invalid SECTOR: "${config.sector}". Must be one of: ${validSectors.join(', ')}`)
     process.exit(1)
   }
 
-  console.log(`✅ Config loaded - Sector: ${config.sector} | Business: ${config.branding.businessName}`)
+  console.log(`Config loaded - Sector: ${config.sector} | Business: ${config.branding.businessName}`)
 }
 
 validateConfig()

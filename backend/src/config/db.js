@@ -7,9 +7,9 @@ const config = require('./env')
 const connectDB = async () => {
   try {
     await mongoose.connect(config.mongoUri)
-    console.log(`✅ MongoDB connected - ${config.branding.businessName}`)
+    console.log(`MongoDB connected - ${config.branding.businessName}`)
   } catch (error) {
-    console.error('❌ MongoDB connection error:', error.message)
+    console.error('ERROR: MongoDB connection error:', error.message)
     process.exit(1)
   }
 }

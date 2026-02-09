@@ -16,7 +16,7 @@ function startWorkers() {
     return await processSingleSMS(job)
   })
 
-  console.log('✅ Workers started (SMS queue)')
+  console.log('Workers started (SMS queue)')
 }
 
 module.exports = { startWorkers }

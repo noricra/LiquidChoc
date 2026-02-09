@@ -12,7 +12,7 @@ async function processSMSBroadcast(job) {
   const { merchantId, liquidationId, subscribers, message } = job.data
 
   if (!twilioClient) {
-    console.warn('⚠️  Twilio not configured, skipping SMS broadcast')
+    console.warn('WARNING: Twilio not configured, skipping SMS broadcast')
     return { sent: 0, total: subscribers.length, skipped: true }
   }
 
@@ -59,7 +59,7 @@ async function processSMSBroadcast(job) {
     }
   }
 
-  console.log(`📊 SMS Broadcast complete: ${sent} sent, ${failed} failed (${subscribers.length} total)`)
+  console.log(`SMS Broadcast complete: ${sent} sent, ${failed} failed (${subscribers.length} total)`)
 
   return {
     sent,

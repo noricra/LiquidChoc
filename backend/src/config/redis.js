@@ -14,11 +14,11 @@ const redis = config.redisUrl
     })
 
 redis.on('error', (err) => {
-  console.error('❌ Redis connection error:', err.message)
+  console.error('ERROR: Redis connection error:', err.message)
 })
 
 redis.on('connect', () => {
-  console.log('✅ Redis connected')
+  console.log('Redis connected')
 })
 
 module.exports = redis

@@ -10,7 +10,7 @@ const twilioClient = (config.twilio.accountSid && config.twilio.authToken)
   : null
 
 if (!twilioClient) {
-  console.warn('⚠️  Twilio not configured (missing credentials)')
+  console.warn('WARNING: Twilio not configured (missing credentials)')
 }
 
 module.exports = twilioClient

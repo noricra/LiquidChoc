@@ -85,7 +85,7 @@ async function uploadProfilePicture(req, res) {
       })
     }
 
-    console.log('📷 Profile picture upload request:', {
+    console.log('Profile picture upload request:', {
       originalname: req.file.originalname,
       mimetype: req.file.mimetype,
       size: `${(req.file.size / (1024 * 1024)).toFixed(2)}MB`
@@ -113,12 +113,12 @@ async function uploadProfilePicture(req, res) {
     merchant.profileImageUrl = imageUrl
     await merchant.save()
 
-    console.log('✅ Profile picture uploaded:', imageUrl)
+    console.log('Profile picture uploaded:', imageUrl)
 
     res.json({ profileImageUrl: imageUrl })
 
   } catch (error) {
-    console.error('❌ Profile picture upload failed:', error)
+    console.error('Profile picture upload failed:', error)
     res.status(500).json({ error: error.message || 'Upload failed' })
   }
 }

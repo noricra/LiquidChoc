@@ -83,12 +83,12 @@ export default function InstallPrompt() {
 
             {iosStep === 1 ? (
               <div className="flex flex-col items-center gap-1">
-                <span className="text-3xl animate-pulse">⬆️</span>
+                <span className="text-3xl animate-pulse">^</span>
                 <p className="text-sm font-medium" style={{ color: 'var(--primary-color)' }}>Tapez sur Partager</p>
               </div>
             ) : (
               <div className="flex flex-col items-center gap-1">
-                <span className="text-3xl">＋</span>
+                <span className="text-3xl">+</span>
                 <p className="text-sm font-medium" style={{ color: 'var(--primary-color)' }}>puis "Sur l'écran d'accueil"</p>
               </div>
             )}

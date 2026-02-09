@@ -28,7 +28,7 @@ async function uploadFile(req, res) {
       return res.status(400).json({ error: 'productId is required' })
     }
 
-    console.log('📁 File upload request:', {
+    console.log('File upload request:', {
       originalname: req.file.originalname,
       mimetype: req.file.mimetype,
       size: req.file.size,
@@ -60,13 +60,13 @@ async function uploadFile(req, res) {
     // Update product size tracking
     productSizes.set(productId, newTotalSize)
 
-    console.log('✅ Upload controller success, path:', imagePath)
-    console.log(`📊 Product ${productId}: ${(newTotalSize / (1024 * 1024)).toFixed(2)}MB / 10MB`)
+    console.log('Upload controller success, path:', imagePath)
+    console.log(`Product ${productId}: ${(newTotalSize / (1024 * 1024)).toFixed(2)}MB / 10MB`)
 
     res.json({ url: `/api/images/${imagePath}` })
 
   } catch (error) {
-    console.error('❌ Upload controller failed:', error)
+    console.error('Upload controller failed:', error)
     res.status(500).json({ error: error.message || 'Upload failed' })
   }
 }
@@ -76,7 +76,7 @@ async function uploadFile(req, res) {
  */
 function resetProductSize(productId) {
   productSizes.delete(productId)
-  console.log(`🗑️  Size tracking reset for product: ${productId}`)
+  console.log(`Size tracking reset for product: ${productId}`)
 }
 
 module.exports = { uploadFile, resetProductSize }

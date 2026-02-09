@@ -16,7 +16,7 @@ const SECTOR_CONFIGS = {
   // ════════════════════════════════════════════════════════════
   food: {
     name: 'Food',
-    emoji: '🍽️',
+    emoji: '',
 
     // Templates par défaut
     templates: {
@@ -67,7 +67,7 @@ const SECTOR_CONFIGS = {
   // ════════════════════════════════════════════════════════════
   games: {
     name: 'Games',
-    emoji: '🎮',
+    emoji: '',
 
     templates: {
       small: {
@@ -113,7 +113,7 @@ const SECTOR_CONFIGS = {
   // ════════════════════════════════════════════════════════════
   services: {
     name: 'Services',
-    emoji: '✨',
+    emoji: '',
 
     templates: {
       small: {

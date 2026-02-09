@@ -32,7 +32,7 @@ async function enqueueSMSBroadcast(data) {
     priority: 1
   })
 
-  console.log(`📤 SMS Broadcast enqueued: Job #${job.id} (${data.subscribers.length} subscribers)`)
+  console.log(`SMS Broadcast enqueued: Job #${job.id} (${data.subscribers.length} subscribers)`)
   return job
 }
 
@@ -50,15 +50,15 @@ async function enqueueSingleSMS(data) {
 
 // Monitoring
 smsBroadcastQueue.on('completed', (job, result) => {
-  console.log(`✅ Job #${job.id} completed: ${result.sent}/${result.total} SMS sent`)
+  console.log(`Job #${job.id} completed: ${result.sent}/${result.total} SMS sent`)
 })
 
 smsBroadcastQueue.on('failed', (job, err) => {
-  console.error(`❌ Job #${job.id} failed:`, err.message)
+  console.error(`Job #${job.id} failed:`, err.message)
 })
 
 smsBroadcastQueue.on('stalled', (job) => {
-  console.warn(`⚠️  Job #${job.id} stalled`)
+  console.warn(`WARNING: Job #${job.id} stalled`)
 })
 
 module.exports = {

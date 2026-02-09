@@ -28,20 +28,20 @@ const Merchant = mongoose.model('Merchant', merchantSchema)
 
 async function initDB() {
   try {
-    console.log('🔗 Connexion à MongoDB...')
+    console.log('Connexion à MongoDB...')
     await mongoose.connect(process.env.MONGODB_URI)
-    console.log('✅ Connecté à MongoDB')
+    console.log('Connecté à MongoDB')
 
     // Vérifier si un merchant existe déjà
     const existing = await Merchant.findOne()
     if (existing) {
-      console.log('⚠️  Un merchant existe déjà :', existing.businessName)
+      console.log('WARNING: Un merchant existe déjà :', existing.businessName)
       console.log('Supprimez-le manuellement si vous voulez recommencer.')
       process.exit(0)
     }
 
     // Créer le merchant
-    console.log('📝 Création du merchant...')
+    console.log('Création du merchant...')
     const merchant = await Merchant.create({
       businessName: 'Test Restaurant Local',
       address: '123 Rue Test, Montréal, QC',
@@ -57,19 +57,19 @@ async function initDB() {
       sales: []
     })
 
-    console.log('✅ Merchant créé avec succès !')
-    console.log('📊 ID:', merchant._id)
-    console.log('🏪 Nom:', merchant.businessName)
+    console.log('Merchant créé avec succès !')
+    console.log('ID:', merchant._id)
+    console.log('Nom:', merchant.businessName)
     console.log('')
-    console.log('🎉 Vous pouvez maintenant lancer le frontend :')
+    console.log('Vous pouvez maintenant lancer le frontend :')
     console.log('   npm run dev:frontend')
     console.log('')
-    console.log('📱 Puis ouvrir : http://localhost:5173')
+    console.log('Puis ouvrir : http://localhost:5173')
 
     process.exit(0)
 
   } catch (error) {
-    console.error('❌ Erreur:', error.message)
+    console.error('ERROR: Erreur:', error.message)
     process.exit(1)
   }
 }

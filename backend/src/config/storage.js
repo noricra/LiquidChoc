@@ -14,9 +14,9 @@ const r2Config = {
 const isConfigured = r2Config.endpoint && r2Config.secretKey && r2Config.applicationKey
 
 if (isConfigured) {
-  console.log(`📦 R2 Storage: ${r2Config.bucketName} (${r2Config.endpoint})`)
+  console.log(`R2 Storage: ${r2Config.bucketName} (${r2Config.endpoint})`)
 } else {
-  console.warn('⚠️  R2 not configured')
+  console.warn('WARNING: R2 not configured')
 }
 
 module.exports = { r2Config, isConfigured }

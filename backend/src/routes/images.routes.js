@@ -46,7 +46,7 @@ router.get('/:productId/:filename', async (req, res) => {
     res.sendFile(imagePath)
 
   } catch (error) {
-    console.error('❌ Error serving image:', error)
+    console.error('Error serving image:', error)
     res.status(500).json({ error: 'Failed to serve image' })
   }
 })

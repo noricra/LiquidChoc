@@ -10,7 +10,7 @@ const stripe = config.stripe.secretKey
   : null
 
 if (!stripe) {
-  console.warn('⚠️  Stripe not configured (missing STRIPE_SECRET_KEY)')
+  console.warn('WARNING: Stripe not configured (missing STRIPE_SECRET_KEY)')
 }
 
 module.exports = stripe
