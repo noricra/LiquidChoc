@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  # MongoDB local pour dev
+  mongodb:
+    image: mongo:7
+    container_name: liquidchoc-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password123
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - liquidchoc-network
+
+  # Redis pour Bull queue (SMS)
+  redis:
+    image: redis:7-alpine
+    container_name: liquidchoc-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - liquidchoc-network
+
+volumes:
+  mongodb_data:
+  redis_data:
+
+networks:
+  liquidchoc-network:
+    driver: bridge

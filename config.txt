@@ -1,0 +1,10 @@
+# Exemple pour le Bowling de Chicoutimi (Dark Mode)
+curl -X POST https://ton-api.railway.app/api/setup \
+-d '{
+  "nomCommerce": "Bowling Saguenay",
+  "primaryColor": "#FF007F",
+  "themeMode": "dark",
+  "stripeSecret": "sk_test_...",
+  "twilioSid": "AC...",
+  "twilioAuth": "..."
+}'
