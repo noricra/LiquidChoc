@@ -74,15 +74,15 @@ export default function Liquidation() {
               <>
                 <button
                   onClick={prevImage}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm shadow-lg flex items-center justify-center text-gray-800 active:scale-90 transition-transform"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-[#006644] shadow-xl flex items-center justify-center text-white active:scale-90 transition-transform hover:bg-[#005538]"
                 >
-                  <ChevronLeft size={20} strokeWidth={2.5} />
+                  <ChevronLeft size={24} strokeWidth={3} />
                 </button>
                 <button
                   onClick={nextImage}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm shadow-lg flex items-center justify-center text-gray-800 active:scale-90 transition-transform"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-[#006644] shadow-xl flex items-center justify-center text-white active:scale-90 transition-transform hover:bg-[#005538]"
                 >
-                  <ChevronRight size={20} strokeWidth={2.5} />
+                  <ChevronRight size={24} strokeWidth={3} />
                 </button>
 
                 {/* Bullets */}
