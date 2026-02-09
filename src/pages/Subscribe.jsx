@@ -14,7 +14,10 @@ export default function Subscribe() {
   useEffect(() => {
     client.get('/merchant')
       .then(({ data }) => setBusinessName(data.merchant?.businessName || 'Ce commerce'))
-      .catch(() => {})
+      .catch((err) => {
+        console.warn('Failed to load merchant info:', err)
+        // Continue anyway - not critical for subscription
+      })
   }, [])
 
   // Soumission

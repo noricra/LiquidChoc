@@ -5,6 +5,7 @@ const config = require('./config/env')
 const webhookRoutes = require('./routes/webhook.routes')
 const routes = require('./routes')
 const errorHandler = require('./middleware/errorHandler')
+const logger = require('./utils/logger')
 
 /**
  * Configuration de l'application Express
@@ -12,6 +13,9 @@ const errorHandler = require('./middleware/errorHandler')
  */
 
 const app = express()
+
+// Add request ID to all requests (for tracing)
+app.use(logger.attachRequestId)
 
 // ═══════════════════════════════════════════════════════════
 // Middleware

@@ -8,6 +8,7 @@ export default function Dashboard() {
   const { merchant, stats, fetchMerchant, loading } = useMerchantStore()
   const [salesData, setSalesData] = useState({ today: 0, week: 0, pending: 0 })
   const [liquidationsData, setLiquidationsData] = useState({ active: 0, total: 0 })
+  const [error, setError] = useState(null)
 
   // Initialisation
   useEffect(() => {
@@ -50,6 +51,7 @@ export default function Dashboard() {
         })
       } catch (e) {
         console.error('Erreur chargement dashboard', e)
+        setError('Impossible de charger les données. Veuillez réessayer.')
       }
     }
 

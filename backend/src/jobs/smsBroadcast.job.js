@@ -2,17 +2,26 @@ const twilioClient = require('../config/twilio')
 const config = require('../config/env')
 const { toE164 } = require('../utils/helpers')
 const Merchant = require('../models/Merchant')
+const logger = require('../utils/logger')
+const crypto = require('crypto')
 
 /**
  * Job Processor : SMS Broadcast
  * Traite l'envoi de SMS en batch avec throttling
  */
 
+/**
+ * Hash phone number for logging (GDPR-compliant)
+ */
+function hashPhone(phone) {
+  return crypto.createHash('sha256').update(phone).digest('hex').substring(0, 8)
+}
+
 async function processSMSBroadcast(job) {
   const { merchantId, liquidationId, subscribers, message } = job.data
 
   if (!twilioClient) {
-    console.warn('WARNING: Twilio not configured, skipping SMS broadcast')
+    logger.warn('Twilio not configured, skipping SMS broadcast')
     return { sent: 0, total: subscribers.length, skipped: true }
   }
 
@@ -38,7 +47,8 @@ async function processSMSBroadcast(job) {
       await new Promise(resolve => setTimeout(resolve, 100))
 
     } catch (error) {
-      console.error(`SMS failed to ${subscriber.phone}:`, error.message)
+      const phoneHash = hashPhone(subscriber.phone)
+      logger.error({ phoneHash, err: error }, 'SMS failed')
       failed++
     }
   }
@@ -55,11 +65,11 @@ async function processSMSBroadcast(job) {
         }
       }
     } catch (err) {
-      console.error('Failed to update smsSentCount:', err.message)
+      logger.error({ err, liquidationId }, 'Failed to update smsSentCount')
     }
   }
 
-  console.log(`SMS Broadcast complete: ${sent} sent, ${failed} failed (${subscribers.length} total)`)
+  logger.info({ sent, failed, total: subscribers.length, liquidationId }, 'SMS Broadcast complete')
 
   return {
     sent,
@@ -87,7 +97,8 @@ async function processSingleSMS(job) {
     })
     return { sent: true }
   } catch (error) {
-    console.error(`SMS failed to ${to}:`, error.message)
+    const phoneHash = hashPhone(to)
+    logger.error({ phoneHash, err: error }, 'SMS failed')
     throw error
   }
 }
