@@ -16,6 +16,7 @@ const saleRoutes = require('./sale.routes')
 const uploadRoutes = require('./upload.routes')
 const checkoutRoutes = require('./checkout.routes')
 const imageRoutes = require('./images.routes')
+const debugRoutes = require('./debug.routes')
 
 // Montage des routes sur /api
 router.use('/api', setupRoutes)
@@ -27,6 +28,7 @@ router.use('/api', saleRoutes)
 router.use('/api', uploadRoutes)
 router.use('/api', checkoutRoutes)
 router.use('/api/images', imageRoutes)
+router.use(debugRoutes) // Debug routes (à supprimer en prod)
 
 // ═══════════════════════════════════════════════════════════
 // Health Check Enrichi (suggestion Gemini)
