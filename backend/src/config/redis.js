@@ -7,7 +7,11 @@ const config = require('./env')
  */
 
 const redis = config.redisUrl
-  ? new Redis(config.redisUrl)
+  ? new Redis(config.redisUrl, {
+      maxRetriesPerRequest: null,
+      enableReadyCheck: false,
+      db: 0  // Force DB 0 (Railway Redis only supports DB 0)
+    })
   : new Redis({
       host: 'localhost',
       port: 6379,

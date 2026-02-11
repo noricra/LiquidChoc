@@ -1,17 +1,32 @@
 const Bull = require('bull')
-const redis = require('../config/redis')
+const config = require('../config/env')
 
 /**
  * Service de queue avec Bull
  * Gère l'envoi de SMS en background pour éviter le bottleneck
  */
 
+// Parse Redis URL and force DB 0
+let redisConfig
+if (config.redisUrl) {
+  const url = new URL(config.redisUrl)
+  redisConfig = {
+    host: url.hostname,
+    port: parseInt(url.port) || 6379,
+    password: url.password || undefined,
+    db: 0  // Force DB 0 (Railway Redis only supports DB 0)
+  }
+} else {
+  redisConfig = {
+    host: 'localhost',
+    port: 6379,
+    db: 0
+  }
+}
+
 // Queue SMS Broadcast
 const smsBroadcastQueue = new Bull('sms-broadcast', {
-  redis: {
-    host: redis.options.host,
-    port: redis.options.port
-  },
+  redis: redisConfig,
   defaultJobOptions: {
     attempts: 3,
     backoff: {
