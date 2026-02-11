@@ -9,12 +9,14 @@ const config = require('../config/env')
 // Parse Redis URL and force DB 0
 let redisConfig
 if (config.redisUrl) {
-  const url = new URL(config.redisUrl)
+  const cleanUrl = config.redisUrl.trim().replace(/["']/g, '')
+  const url = new URL(cleanUrl)
   redisConfig = {
     host: url.hostname,
     port: parseInt(url.port) || 6379,
     password: url.password || undefined,
-    db: 0  // Force DB 0 (Railway Redis only supports DB 0)
+    db: 0,
+    tls: url.protocol === 'rediss:' ? {} : undefined
   }
 } else {
   redisConfig = {
