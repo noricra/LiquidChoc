@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
-import { Copy, Search, UserPlus, QrCode, Users } from 'lucide-react'
+import { Copy, Search, UserPlus, QrCode, Users, Trash2 } from 'lucide-react'
 import Header from '../components/Header'
 import Toast from '../components/Toast'
 import client from '../api/client'
@@ -66,6 +66,18 @@ export default function Subscribers() {
       fetchSubscribers()
     } catch (e) {
       setToast({ msg: e.response?.data?.error || 'Erreur', type: 'error' })
+    }
+  }
+
+  // Suppression
+  async function deleteSubscriber(id) {
+    if (!confirm('Supprimer cet abonné ?')) return
+    try {
+      await client.delete(`/subscribers/${id}`)
+      setToast({ msg: 'Abonné supprimé', type: 'success' })
+      fetchSubscribers()
+    } catch (e) {
+      setToast({ msg: 'Erreur suppression', type: 'error' })
     }
   }
 
@@ -204,11 +216,12 @@ export default function Subscribers() {
                       <Copy size={12} className="text-gray-400 group-hover:text-[#006644] transition-colors" strokeWidth={2.5} />
                     </button>
                   </div>
-                  <div className="w-10 h-10 rounded-full bg-[#006644]/10 flex items-center justify-center flex-shrink-0 ml-3">
-                    <span className="text-[#006644] text-sm font-black">
-                      {(s.name || '?').charAt(0).toUpperCase()}
-                    </span>
-                  </div>
+                  <button
+                    onClick={() => deleteSubscriber(s._id)}
+                    className="w-10 h-10 rounded-full bg-red-50 hover:bg-red-100 flex items-center justify-center flex-shrink-0 ml-3 transition-colors active:scale-95"
+                  >
+                    <Trash2 size={18} className="text-red-500" strokeWidth={2.5} />
+                  </button>
                 </div>
               </div>
             ))}

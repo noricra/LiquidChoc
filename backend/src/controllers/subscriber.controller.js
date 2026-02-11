@@ -53,7 +53,35 @@ async function createSubscriber(req, res) {
   }
 }
 
+/**
+ * Supprime un subscriber
+ */
+async function deleteSubscriber(req, res) {
+  try {
+    const merchant = await Merchant.getMerchant()
+    if (!merchant) {
+      return res.status(404).json({ error: 'Not setup' })
+    }
+
+    const { id } = req.params
+    const index = merchant.subscribers.findIndex(s => s._id.toString() === id)
+
+    if (index === -1) {
+      return res.status(404).json({ error: 'Subscriber not found' })
+    }
+
+    merchant.subscribers.splice(index, 1)
+    await merchant.save()
+
+    res.json({ success: true })
+  } catch (error) {
+    console.error('Delete subscriber error:', error)
+    res.status(500).json({ error: 'Failed to delete subscriber' })
+  }
+}
+
 module.exports = {
   getSubscribers,
-  createSubscriber
+  createSubscriber,
+  deleteSubscriber
 }
