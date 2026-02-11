@@ -18,7 +18,13 @@ const AWS = require('aws-sdk')
  */
 async function uploadImage(buffer, filename, mimetype = 'image/jpeg', options = {}) {
   if (!isConfigured) {
-    throw new Error('R2 not configured. Set R2_* variables in .env')
+    console.error('R2 Configuration missing:', {
+      hasEndpoint: !!r2Config.endpoint,
+      hasSecretKey: !!r2Config.secretKey,
+      hasApplicationKey: !!r2Config.applicationKey,
+      hasBucketName: !!r2Config.bucketName
+    })
+    throw new Error('R2 not configured. Check R2_ENDPOINT, R2_SECRET_KEY, R2_APPLICATION_KEY in Vercel environment variables')
   }
 
   // Récupérer le nom du commerce depuis les options ou config
