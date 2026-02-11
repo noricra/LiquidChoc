@@ -67,6 +67,18 @@ async function uploadFile(req, res) {
 
   } catch (error) {
     console.error('Upload controller failed:', error)
+
+    // Gérer les erreurs multer spécifiques
+    if (error.code === 'LIMIT_FILE_SIZE') {
+      return res.status(413).json({
+        error: 'Fichier trop volumineux. Maximum 4 MB par image.'
+      })
+    }
+
+    if (error.message && error.message.includes('Type de fichier non autorisé')) {
+      return res.status(400).json({ error: error.message })
+    }
+
     res.status(500).json({ error: error.message || 'Upload failed' })
   }
 }
