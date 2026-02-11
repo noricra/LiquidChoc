@@ -15,21 +15,15 @@ async function startServer() {
     // Connexion MongoDB
     await connectDB()
 
-    // Démarrer les workers Bull (queue SMS) - SEULEMENT si pas en serverless
-    const isServerless = process.env.VERCEL === '1' || process.env.IS_SERVERLESS === 'true'
-
-    if (!isServerless) {
-      startWorkers()
-      logger.info('Bull workers started (SMS queue)')
-    } else {
-      logger.info('Serverless mode detected - skipping Bull workers')
-    }
+    // Démarrer les workers Bull (queue SMS)
+    startWorkers()
+    logger.info('Bull workers started (SMS queue)')
 
     // Afficher la config Sector-Aware
     const sectorConfig = getSectorConfig()
     console.log(`
 ╔════════════════════════════════════════════════════════════╗
-║                  BACKEND CAMÉLÉON                          ║
+║                  BACKEND CAMÉLÉON - RAILWAY                ║
 ║                                                            ║
 ║  Business: ${sectorConfig.businessName.padEnd(46)} ║
 ║  Sector:   ${sectorConfig.name.padEnd(46)} ║
@@ -38,7 +32,7 @@ async function startServer() {
 ║                                                            ║
 ║  Port:     ${config.port.toString().padEnd(46)} ║
 ║  Env:      ${config.nodeEnv.padEnd(46)} ║
-║  Mode:     ${(isServerless ? 'SERVERLESS' : 'STANDARD').padEnd(46)} ║
+║  Mode:     LONG-RUNNING (Bull workers enabled)             ║
 ╚════════════════════════════════════════════════════════════╝
     `)
 

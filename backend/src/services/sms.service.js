@@ -85,64 +85,10 @@ async function sendSMS(to, body) {
 }
 
 /**
- * SMS Broadcast directement (sans queue) pour environnement serverless
- */
-async function smsBroadcastDirect(merchant, liquidation) {
-  if (!merchant.subscribers || merchant.subscribers.length === 0) {
-    logger.info('No subscribers for SMS broadcast')
-    return 0
-  }
-
-  const liquidationUrl = `${config.frontendUrl}/liquidation/${liquidation.shortId || liquidation._id}`
-
-  const message = generateSMS('liquidation', {
-    productDescription: liquidation.title,
-    originalPrice: liquidation.regularPrice.toFixed(2),
-    discountedPrice: liquidation.liquidaPrice.toFixed(2),
-    discountPercent: Math.round(((liquidation.regularPrice - liquidation.liquidaPrice) / liquidation.regularPrice) * 100),
-    quantity: liquidation.quantity - liquidation.quantitySold,
-    liquidationUrl: liquidationUrl
-  })
-
-  logger.info({
-    merchantId: merchant._id.toString(),
-    liquidationId: liquidation._id.toString(),
-    subscriberCount: merchant.subscribers.length
-  }, 'Starting direct SMS broadcast (serverless mode)')
-
-  let sent = 0
-  for (const subscriber of merchant.subscribers) {
-    try {
-      await sendSMS(subscriber.phone, message)
-      sent++
-      // Throttle to respect Twilio rate limits (10 SMS/sec max)
-      await new Promise(resolve => setTimeout(resolve, 120))
-    } catch (error) {
-      logger.warn({
-        phoneHash: hashPhone(subscriber.phone),
-        err: error
-      }, 'SMS failed to subscriber')
-    }
-  }
-
-  logger.info({
-    sent,
-    total: merchant.subscribers.length
-  }, 'Direct SMS broadcast completed')
-
-  return sent
-}
-
-/**
- * SMS Broadcast via Queue (pour environnement avec workers)
+ * SMS Broadcast via Bull Queue (Railway version)
+ * Scalable pour 300+ abonnés sans timeout
  */
 async function smsBroadcast(merchant, liquidation) {
-  // En environnement serverless (Vercel), utiliser broadcast direct
-  const isServerless = process.env.VERCEL === '1' || process.env.IS_SERVERLESS === 'true'
-
-  if (isServerless) {
-    return smsBroadcastDirect(merchant, liquidation)
-  }
 
   if (!merchant.subscribers || merchant.subscribers.length === 0) {
     logger.info('No subscribers for SMS broadcast')
