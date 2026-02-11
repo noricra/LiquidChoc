@@ -45,9 +45,10 @@ export default function Dashboard() {
         })
 
         const liquidations = liquidationsRes.data.liquidations || []
+        const nonCancelled = liquidations.filter(l => l.status !== 'cancelled')
         setLiquidationsData({
-          active: liquidations.filter(l => l.status === 'active').length,
-          total: liquidations.length
+          active: nonCancelled.filter(l => l.status === 'active').length,
+          total: nonCancelled.length
         })
       } catch (e) {
         console.error('Erreur chargement dashboard', e)
