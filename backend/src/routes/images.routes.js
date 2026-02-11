@@ -15,12 +15,16 @@ router.get('/:productId/:filename', async (req, res) => {
   try {
     const { productId, filename } = req.params
 
+    console.log(`[IMAGE] Request: ${productId}/${filename}`)
+
     // Security: validate filename (prevent path traversal)
     if (filename.includes('..') || filename.includes('/')) {
+      console.error('[IMAGE] Invalid filename detected')
       return res.status(400).json({ error: 'Invalid filename' })
     }
 
     if (!isConfigured) {
+      console.error('[IMAGE] R2 not configured')
       return res.status(500).json({ error: 'Storage not configured' })
     }
 
@@ -34,6 +38,10 @@ router.get('/:productId/:filename', async (req, res) => {
 
     // R2 key structure: {business}/products/{productId}/{filename}
     const r2Key = `${cleanBusinessName}/products/${productId}/${filename}`
+
+    console.log(`[IMAGE] R2 Key: ${r2Key}`)
+    console.log(`[IMAGE] Bucket: ${r2Config.bucketName}`)
+    console.log(`[IMAGE] Endpoint: ${r2Config.endpoint}`)
 
     const s3 = new AWS.S3({
       endpoint: r2Config.endpoint,
@@ -67,22 +75,35 @@ router.get('/:productId/:filename', async (req, res) => {
     res.setHeader('Cache-Control', 'public, max-age=31536000, immutable')
     res.setHeader('Content-Length', data.ContentLength)
 
+    console.log(`[IMAGE] Successfully fetched from R2, size: ${data.ContentLength} bytes`)
+
     // Stream the image directly to client
     res.send(data.Body)
 
   } catch (error) {
-    console.error('Error serving image:', error)
+    console.error('[IMAGE] Error:', {
+      code: error.code,
+      message: error.message,
+      statusCode: error.statusCode,
+      productId: req.params.productId,
+      filename: req.params.filename
+    })
 
     if (error.code === 'NoSuchKey') {
-      return res.status(404).json({ error: 'Image not found' })
+      console.error(`[IMAGE] File not found in R2`)
+      return res.status(404).json({ error: 'Image not found in storage' })
     }
 
     if (error.code === 'AccessDenied') {
-      console.error('R2 Access Denied - check credentials')
-      return res.status(500).json({ error: 'Storage access denied' })
+      console.error('[IMAGE] R2 Access Denied - check R2 credentials in Vercel')
+      return res.status(403).json({ error: 'Storage access denied' })
     }
 
-    res.status(500).json({ error: 'Failed to serve image' })
+    res.status(500).json({
+      error: 'Failed to serve image',
+      code: error.code,
+      message: error.message
+    })
   }
 })
 
