@@ -1,0 +1,11 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "installCommand": "npm install",
+  "devCommand": "npm run dev",
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "/api" },
+    { "source": "/webhook", "destination": "/api" },
+    { "source": "/health", "destination": "/api" }
+  ]
+}
