@@ -54,7 +54,10 @@ const SECTOR_CONFIGS = {
 
     // Templates SMS personnalisés
     sms: {
-      liquidation: (data) => `LIQUIDACHOC: ${data.productDescription} dispo (-${data.discountPercent}%)! ${data.discountedPrice}$ au lieu de ${data.originalPrice}$. Stock: ${data.quantity}. Voir: ${data.liquidationUrl} (STOP=Desabo)`,
+      liquidation: (data) => {
+        const urgencyLine = data.quantity === 1 ? `Vite, il n'en reste que 1!\n` : ''
+        return `${data.businessName} : ${data.productDescription} en liquidation (-${data.discountPercent}%) !\nPrix: ${data.discountedPrice}$ (au lieu de ${data.originalPrice}$).\n${urgencyLine}\nCliquez ici :\n${data.liquidationUrl}\n\nSTOP=Desabo`
+      },
 
       confirmation: (data) => `Commande OK! Code: ${data.pickupCode}. Pickup: ${data.address} avant ${data.expiresAt}. Merci!`,
 
@@ -100,7 +103,10 @@ const SECTOR_CONFIGS = {
     pickupDuration: 24,
 
     sms: {
-      liquidation: (data) => `LIQUIDACHOC: ${data.productDescription} dispo (-${data.discountPercent}%)! ${data.discountedPrice}$ au lieu de ${data.originalPrice}$. Places: ${data.quantity}. Voir: ${data.liquidationUrl} (STOP=Desabo)`,
+      liquidation: (data) => {
+        const urgencyLine = data.quantity === 1 ? `Vite, il n'en reste que 1!\n` : ''
+        return `${data.businessName} : ${data.productDescription} en liquidation (-${data.discountPercent}%) !\nPrix: ${data.discountedPrice}$ (au lieu de ${data.originalPrice}$).\n${urgencyLine}\nCliquez ici :\n${data.liquidationUrl}\n\nSTOP=Desabo`
+      },
 
       confirmation: (data) => `Reservation OK! Code: ${data.pickupCode}. Acces: ${data.address} avant ${data.expiresAt}. Bon jeu!`,
 
@@ -146,7 +152,10 @@ const SECTOR_CONFIGS = {
     pickupDuration: 48,
 
     sms: {
-      liquidation: (data) => `LIQUIDACHOC: ${data.productDescription} dispo (-${data.discountPercent}%)! ${data.discountedPrice}$ au lieu de ${data.originalPrice}$. Creneaux: ${data.quantity}. Voir: ${data.liquidationUrl} (STOP=Desabo)`,
+      liquidation: (data) => {
+        const urgencyLine = data.quantity === 1 ? `Vite, il n'en reste que 1!\n` : ''
+        return `${data.businessName} : ${data.productDescription} en liquidation (-${data.discountPercent}%) !\nPrix: ${data.discountedPrice}$ (au lieu de ${data.originalPrice}$).\n${urgencyLine}\nCliquez ici :\n${data.liquidationUrl}\n\nSTOP=Desabo`
+      },
 
       confirmation: (data) => `Reservation OK! Code: ${data.pickupCode}. Rendez-vous: ${data.address} avant ${data.expiresAt}. A bientot!`,
 
