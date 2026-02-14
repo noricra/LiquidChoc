@@ -43,6 +43,9 @@ const config = {
   // Setup (onboarding initial)
   setupSecret: process.env.SETUP_SECRET,
 
+  // Admin auth
+  adminPassword: process.env.ADMIN_PASSWORD || 'changeme',
+
   // ════════════════════════════════════════════════════════════
   // BACKEND CAMÉLÉON : Configuration Sector-Aware
   // ════════════════════════════════════════════════════════════

@@ -7,6 +7,7 @@ const express = require('express')
 const router = express.Router()
 
 // Import de toutes les routes
+const authRoutes = require('./auth.routes')
 const setupRoutes = require('./setup.routes')
 const merchantRoutes = require('./merchant.routes')
 const templateRoutes = require('./template.routes')
@@ -17,17 +18,19 @@ const uploadRoutes = require('./upload.routes')
 const checkoutRoutes = require('./checkout.routes')
 const imageRoutes = require('./images.routes')
 const debugRoutes = require('./debug.routes')
+const { requireAuth } = require('../middleware/auth')
 
 // Montage des routes sur /api
-router.use('/api', setupRoutes)
-router.use('/api', merchantRoutes)
-router.use('/api', templateRoutes)
-router.use('/api', subscriberRoutes)
-router.use('/api', liquidationRoutes)
-router.use('/api', saleRoutes)
-router.use('/api', uploadRoutes)
-router.use('/api', checkoutRoutes)
-router.use('/api/images', imageRoutes)
+router.use('/api', authRoutes) // Public
+router.use('/api', setupRoutes) // Public
+router.use('/api', checkoutRoutes) // Public (client needs this)
+router.use('/api/images', imageRoutes) // Public (R2 images)
+router.use('/api', liquidationRoutes) // Partially public (GET :id), partially protected
+router.use('/api', requireAuth, merchantRoutes) // Protected
+router.use('/api', requireAuth, templateRoutes) // Protected
+router.use('/api', requireAuth, subscriberRoutes) // Protected
+router.use('/api', requireAuth, saleRoutes) // Protected
+router.use('/api', requireAuth, uploadRoutes) // Protected
 router.use(debugRoutes) // Debug routes (à supprimer en prod)
 
 // ═══════════════════════════════════════════════════════════

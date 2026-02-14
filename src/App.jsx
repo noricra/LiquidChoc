@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useEffect } from 'react'
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import useMerchantStore from './store/useMerchantStore'
 import BottomNav from './components/BottomNav'
 
@@ -11,6 +11,13 @@ const Settings     = lazy(() => import('./pages/Settings'))
 const Subscribe    = lazy(() => import('./pages/Subscribe'))
 const Liquidation  = lazy(() => import('./pages/Liquidation'))
 const Success      = lazy(() => import('./pages/Success'))
+const Login        = lazy(() => import('./pages/Login'))
+
+function ProtectedRoute({ children }) {
+  const token = localStorage.getItem('token')
+  if (!token) return <Navigate to="/login" replace />
+  return children
+}
 
 const THEMES = {
   light: { '--bg-color': '#FFFFFF', '--card-color': '#F8F9FA', '--text-color': '#000000', '--text-muted': '#64748B', '--border-color': '#E5E7EB', '--card-shadow': '0 8px 30px rgb(0, 0, 0, 0.04)', '--skeleton-bg': '#E2E8F0' },
@@ -19,7 +26,7 @@ const THEMES = {
 
 function BottomNavConditional() {
   const loc = useLocation()
-  if (loc.pathname.startsWith('/liquidation') || loc.pathname === '/subscribe' || loc.pathname === '/success') return null
+  if (loc.pathname.startsWith('/liquidation') || loc.pathname === '/subscribe' || loc.pathname === '/success' || loc.pathname === '/login') return null
   return <BottomNav />
 }
 
@@ -41,15 +48,16 @@ function App() {
     <BrowserRouter>
       <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)' }}>Chargement...</div>}>
         <Routes>
-          <Route path="/"                  element={<Dashboard />}   />
-          <Route path="/dashboard"         element={<Dashboard />}   />
-          <Route path="/catalogue"         element={<Catalogue />}   />
-          <Route path="/sales"             element={<Sales />}       />
-          <Route path="/subscribers"       element={<Subscribers />} />
-          <Route path="/settings"          element={<Settings />}    />
+          <Route path="/login"             element={<Login />}       />
           <Route path="/subscribe"         element={<Subscribe />}   />
           <Route path="/liquidation/:id"   element={<Liquidation />} />
           <Route path="/success"           element={<Success />}     />
+          <Route path="/"                  element={<ProtectedRoute><Dashboard /></ProtectedRoute>}   />
+          <Route path="/dashboard"         element={<ProtectedRoute><Dashboard /></ProtectedRoute>}   />
+          <Route path="/catalogue"         element={<ProtectedRoute><Catalogue /></ProtectedRoute>}   />
+          <Route path="/sales"             element={<ProtectedRoute><Sales /></ProtectedRoute>}       />
+          <Route path="/subscribers"       element={<ProtectedRoute><Subscribers /></ProtectedRoute>} />
+          <Route path="/settings"          element={<ProtectedRoute><Settings /></ProtectedRoute>}    />
         </Routes>
       </Suspense>
       <BottomNavConditional />
