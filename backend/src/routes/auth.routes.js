@@ -1,9 +1,11 @@
 const express = require('express')
 const config = require('../config/env')
+const { loginLimiter } = require('../middleware/rateLimiter')
 
 const router = express.Router()
 
-router.post('/login', (req, res) => {
+// Rate limiter: 5 tentatives max par 15 min
+router.post('/login', loginLimiter, (req, res) => {
   const { password } = req.body
 
   if (!password || password !== config.adminPassword) {

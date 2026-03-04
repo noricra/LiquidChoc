@@ -19,10 +19,14 @@ const checkoutRoutes = require('./checkout.routes')
 const imageRoutes = require('./images.routes')
 const debugRoutes = require('./debug.routes')
 const { requireAuth } = require('../middleware/auth')
+const { apiLimiter } = require('../middleware/rateLimiter')
+
+// Rate limiter général sur toutes les routes API (100 req/min)
+router.use('/api', apiLimiter)
 
 // Montage des routes sur /api
-router.use('/api', authRoutes) // Public
-router.use('/api', setupRoutes) // Public
+router.use('/api', authRoutes) // Public (mais avec loginLimiter)
+router.use('/api', setupRoutes) // Public (mais avec setupLimiter)
 router.use('/api', checkoutRoutes) // Public (client needs this)
 router.use('/api/images', imageRoutes) // Public (R2 images)
 router.use('/api', liquidationRoutes) // Partially public (GET :id), partially protected
